@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
 import toast from 'react-hot-toast';
-import { FiClock, FiAward, FiPlay, FiBookOpen } from 'react-icons/fi';
+import { FiClock, FiPlay, FiBookOpen } from 'react-icons/fi';
 import './GatePage.css';
 
 export default function GatePage() {
@@ -18,7 +18,8 @@ export default function GatePage() {
   ];
   const YEARS = ['All', '2023', '2022', '2021', '2020', '2019'];
 
-  useEffect(() => { fetchQuestions(); }, [filters]);
+// eslint-disable-next-line
+useEffect(() => { fetchQuestions(); }, [filters]);
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -180,18 +181,18 @@ function PracticeTest({ questions, onExit }) {
   const [submitted, setSubmitted] = useState(false);
   const [result,    setResult]    = useState(null);
 
-  // Countdown timer
-  useEffect(() => {
-    if (submitted) return;
-    if (timeLeft <= 0) {
-      handleSubmit();
-      return;
-    }
-    const timer = setInterval(() => {
-      setTimeLeft(prev => prev - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [timeLeft, submitted]);
+  // eslint-disable-next-line
+useEffect(() => {
+  if (submitted) return;
+  if (timeLeft <= 0) {
+    handleSubmit();
+    return;
+  }
+  const timer = setInterval(() => {
+    setTimeLeft(prev => prev - 1);
+  }, 1000);
+  return () => clearInterval(timer);
+}, [timeLeft, submitted]);
 
   // Format time as HH:MM:SS
   const formatTime = (secs) => {

@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import {
   FiBookOpen, FiAward, FiDownload,
-  FiClock, FiTrendingUp, FiArrowRight
+   FiTrendingUp, FiArrowRight
 } from 'react-icons/fi';
 import './DashboardPage.css';
 

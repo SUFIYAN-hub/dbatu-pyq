@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../utils/api';
 import Navbar from '../components/Navbar';
 import toast from 'react-hot-toast';
-import { FiDownload, FiSearch, FiFilter, FiX, FiExternalLink } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiX, FiExternalLink } from 'react-icons/fi';
 import './PapersPage.css';
 
 // Filter options
@@ -28,9 +28,6 @@ const fetchPapers = async () => {
     if (filters.semester !== 'All') params.semester = filters.semester;
     if (filters.examYear !== 'All') params.examYear = filters.examYear;
     if (search.trim())              params.subject  = search.trim();
-
-    // Always grab fresh token from localStorage
-    const token = localStorage.getItem('token');
 
     const res = await api.get('/api/papers', { params });
 
