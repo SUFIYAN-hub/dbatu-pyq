@@ -40,11 +40,11 @@ const fetchPapers = async () => {
   }
 };
 
-  // Fetch whenever filters change
   useEffect(() => {
     fetchPapers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
-
+  
   // Search on Enter key
   const handleSearchKey = (e) => {
     if (e.key === 'Enter') fetchPapers();

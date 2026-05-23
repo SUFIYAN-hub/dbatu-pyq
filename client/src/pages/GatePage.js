@@ -1,41 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import api from '../utils/api';
-import Navbar from '../components/Navbar';
-import toast from 'react-hot-toast';
-import { FiClock, FiPlay, FiBookOpen } from 'react-icons/fi';
-import './GatePage.css';
+import React, { useState, useEffect } from "react";
+import api from "../utils/api";
+import Navbar from "../components/Navbar";
+import toast from "react-hot-toast";
+import { FiClock, FiPlay, FiBookOpen } from "react-icons/fi";
+import "./GatePage.css";
 
 export default function GatePage() {
   const [questions, setQuestions] = useState([]);
-  const [loading,   setLoading]   = useState(true);
+  const [loading, setLoading] = useState(true);
   const [testStarted, setTestStarted] = useState(false);
-  const [filters, setFilters] = useState({ topic: 'All', examYear: 'All' });
+  const [filters, setFilters] = useState({ topic: "All", examYear: "All" });
 
   const TOPICS = [
-    'All', 'Network Theory', 'Electronic Devices', 'Analog Circuits',
-    'Digital Circuits', 'Signals & Systems', 'Control Systems',
-    'Communications', 'Electromagnetics', 'Engineering Mathematics'
+    "All",
+    "Network Theory",
+    "Electronic Devices",
+    "Analog Circuits",
+    "Digital Circuits",
+    "Signals & Systems",
+    "Control Systems",
+    "Communications",
+    "Electromagnetics",
+    "Engineering Mathematics",
   ];
-  const YEARS = ['All', '2023', '2022', '2021', '2020', '2019'];
+  const YEARS = ["All", "2023", "2022", "2021", "2020", "2019"];
 
-// eslint-disable-next-line
-useEffect(() => { fetchQuestions(); }, [filters]);
+  // eslint-disable-next-line
+  useEffect(() => {
+    fetchQuestions();
+  }, [filters]);
 
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      const token  = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const params = {};
-      if (filters.topic   !== 'All') params.topic   = filters.topic;
-      if (filters.examYear !== 'All') params.examYear = filters.examYear;
+      if (filters.topic !== "All") params.topic = filters.topic;
+      if (filters.examYear !== "All") params.examYear = filters.examYear;
 
-      const res = await api.get('/api/gate', {
+      const res = await api.get("/api/gate", {
         params,
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       setQuestions(res.data.questions);
     } catch {
-      toast.error('Failed to load questions');
+      toast.error("Failed to load questions");
     } finally {
       setLoading(false);
     }
@@ -44,7 +53,9 @@ useEffect(() => { fetchQuestions(); }, [filters]);
   // Start test — need at least 1 question
   const handleStartTest = () => {
     if (questions.length === 0) {
-      toast.error('No questions available. Admin needs to add questions first!');
+      toast.error(
+        "No questions available. Admin needs to add questions first!",
+      );
       return;
     }
     setTestStarted(true);
@@ -64,7 +75,6 @@ useEffect(() => { fetchQuestions(); }, [filters]);
     <div className="gate-wrapper">
       <Navbar />
       <main className="gate-main">
-
         {/* Header */}
         <div className="gate-header">
           <div>
@@ -114,10 +124,10 @@ useEffect(() => { fetchQuestions(); }, [filters]);
           <div className="filter-section">
             <span className="filter-label">Topic:</span>
             <div className="filter-btns">
-              {TOPICS.map(t => (
+              {TOPICS.map((t) => (
                 <button
                   key={t}
-                  className={`filter-btn ${filters.topic === t ? 'active' : ''}`}
+                  className={`filter-btn ${filters.topic === t ? "active" : ""}`}
                   onClick={() => setFilters({ ...filters, topic: t })}
                 >
                   {t}
@@ -129,10 +139,10 @@ useEffect(() => { fetchQuestions(); }, [filters]);
           <div className="filter-section">
             <span className="filter-label">Year:</span>
             <div className="filter-btns">
-              {YEARS.map(y => (
+              {YEARS.map((y) => (
                 <button
                   key={y}
-                  className={`filter-btn ${filters.examYear === y ? 'active' : ''}`}
+                  className={`filter-btn ${filters.examYear === y ? "active" : ""}`}
                   onClick={() => setFilters({ ...filters, examYear: y })}
                 >
                   {y}
@@ -152,7 +162,7 @@ useEffect(() => { fetchQuestions(); }, [filters]);
           ) : questions.length === 0 ? (
             <div className="no-questions">
               <p>😕 No questions found for selected filters.</p>
-              <p style={{ fontSize: '0.85rem', marginTop: 8 }}>
+              <p style={{ fontSize: "0.85rem", marginTop: 8 }}>
                 Try different filters or ask admin to add questions.
               </p>
             </div>
@@ -163,7 +173,6 @@ useEffect(() => { fetchQuestions(); }, [filters]);
             </button>
           )}
         </div>
-
       </main>
     </div>
   );
@@ -175,46 +184,47 @@ useEffect(() => { fetchQuestions(); }, [filters]);
 function PracticeTest({ questions, onExit }) {
   const TOTAL_TIME = 3 * 60 * 60; // 3 hours in seconds
 
-  const [current,   setCurrent]   = useState(0);
-  const [answers,   setAnswers]   = useState({}); // { questionId: 'A' }
-  const [timeLeft,  setTimeLeft]  = useState(TOTAL_TIME);
+  const [current, setCurrent] = useState(0);
+  const [answers, setAnswers] = useState({}); // { questionId: 'A' }
+  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
   const [submitted, setSubmitted] = useState(false);
-  const [result,    setResult]    = useState(null);
+  const [result, setResult] = useState(null);
 
   // eslint-disable-next-line
-useEffect(() => {
-  if (submitted) return;
-  if (timeLeft <= 0) {
-    handleSubmit();
-    return;
-  }
-  const timer = setInterval(() => {
-    setTimeLeft(prev => prev - 1);
-  }, 1000);
-  return () => clearInterval(timer);
-}, [timeLeft, submitted]);
-
+  useEffect(() => {
+    if (submitted) return;
+    if (timeLeft <= 0) {
+      handleSubmit();
+      return;
+    }
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft, submitted]);
+  
   // Format time as HH:MM:SS
   const formatTime = (secs) => {
     const h = Math.floor(secs / 3600);
     const m = Math.floor((secs % 3600) / 60);
     const s = secs % 60;
-    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   };
 
   const handleAnswer = (questionId, option) => {
-    setAnswers(prev => ({ ...prev, [questionId]: option }));
+    setAnswers((prev) => ({ ...prev, [questionId]: option }));
   };
 
   const handleSubmit = () => {
     // Calculate score
-    let correct  = 0;
-    let wrong    = 0;
-    let skipped  = 0;
+    let correct = 0;
+    let wrong = 0;
+    let skipped = 0;
     let totalMarks = 0;
-    let scored   = 0;
+    let scored = 0;
 
-    questions.forEach(q => {
+    questions.forEach((q) => {
       const marks = parseInt(q.marks) || 1;
       totalMarks += marks;
 
@@ -231,10 +241,15 @@ useEffect(() => {
     });
 
     setResult({
-      correct, wrong, skipped,
+      correct,
+      wrong,
+      skipped,
       totalMarks,
       scored: Math.max(0, parseFloat(scored.toFixed(2))),
-      percentage: Math.max(0, parseFloat(((scored / totalMarks) * 100).toFixed(1)))
+      percentage: Math.max(
+        0,
+        parseFloat(((scored / totalMarks) * 100).toFixed(1)),
+      ),
     });
     setSubmitted(true);
   };
@@ -251,28 +266,32 @@ useEffect(() => {
     );
   }
 
-  const q           = questions[current];
-  const answered    = Object.keys(answers).length;
-  const OPTIONS     = ['A', 'B', 'C', 'D'];
-  const isLowTime   = timeLeft < 600; // less than 10 mins
+  const q = questions[current];
+  const answered = Object.keys(answers).length;
+  const OPTIONS = ["A", "B", "C", "D"];
+  const isLowTime = timeLeft < 600; // less than 10 mins
 
   return (
     <div className="test-wrapper">
-
       {/* Test header */}
       <div className="test-header">
         <div className="test-logo">🏆 GATE Practice Test</div>
 
-        <div className={`test-timer ${isLowTime ? 'low' : ''}`}>
+        <div className={`test-timer ${isLowTime ? "low" : ""}`}>
           <FiClock size={16} />
           {formatTime(timeLeft)}
         </div>
 
         <div className="test-progress-info">
-          <span>{answered}/{questions.length} answered</span>
-          <button className="submit-early-btn" onClick={() => {
-            if (window.confirm('Submit test now?')) handleSubmit();
-          }}>
+          <span>
+            {answered}/{questions.length} answered
+          </span>
+          <button
+            className="submit-early-btn"
+            onClick={() => {
+              if (window.confirm("Submit test now?")) handleSubmit();
+            }}
+          >
             Submit Test
           </button>
         </div>
@@ -287,24 +306,27 @@ useEffect(() => {
       </div>
 
       <div className="test-body">
-
         {/* Question panel */}
         <div className="question-panel">
           <div className="q-meta">
-            <span className="q-num-badge">Q {current + 1} of {questions.length}</span>
+            <span className="q-num-badge">
+              Q {current + 1} of {questions.length}
+            </span>
             <span className="q-topic-badge">{q.topic}</span>
-            <span className="q-marks-badge">{q.marks} Mark{q.marks > 1 ? 's' : ''}</span>
+            <span className="q-marks-badge">
+              {q.marks} Mark{q.marks > 1 ? "s" : ""}
+            </span>
             <span className="q-year-badge">{q.examYear}</span>
           </div>
 
           <p className="q-question">{q.question}</p>
 
           <div className="options-list">
-            {OPTIONS.map(opt => (
+            {OPTIONS.map((opt) => (
               <button
                 key={opt}
                 className={`option-btn
-                  ${answers[q._id] === opt ? 'selected' : ''}
+                  ${answers[q._id] === opt ? "selected" : ""}
                 `}
                 onClick={() => handleAnswer(q._id, opt)}
               >
@@ -318,7 +340,7 @@ useEffect(() => {
           <div className="q-navigation">
             <button
               className="nav-btn"
-              onClick={() => setCurrent(prev => prev - 1)}
+              onClick={() => setCurrent((prev) => prev - 1)}
               disabled={current === 0}
             >
               ← Previous
@@ -338,7 +360,7 @@ useEffect(() => {
             {current < questions.length - 1 ? (
               <button
                 className="nav-btn next"
-                onClick={() => setCurrent(prev => prev + 1)}
+                onClick={() => setCurrent((prev) => prev + 1)}
               >
                 Next →
               </button>
@@ -346,7 +368,7 @@ useEffect(() => {
               <button
                 className="nav-btn submit"
                 onClick={() => {
-                  if (window.confirm('Submit the test?')) handleSubmit();
+                  if (window.confirm("Submit the test?")) handleSubmit();
                 }}
               >
                 Submit ✓
@@ -363,8 +385,8 @@ useEffect(() => {
               <button
                 key={ques._id}
                 className={`palette-btn
-                  ${idx === current ? 'current' : ''}
-                  ${answers[ques._id] ? 'answered' : ''}
+                  ${idx === current ? "current" : ""}
+                  ${answers[ques._id] ? "answered" : ""}
                 `}
                 onClick={() => setCurrent(idx)}
               >
@@ -385,7 +407,6 @@ useEffect(() => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
@@ -398,10 +419,10 @@ function ResultScreen({ result, questions, answers, onExit }) {
   const [showReview, setShowReview] = useState(false);
 
   const getGrade = (pct) => {
-    if (pct >= 80) return { label: 'Excellent! 🎉', color: '#10b981' };
-    if (pct >= 60) return { label: 'Good Job! 👍', color: '#3b82f6' };
-    if (pct >= 40) return { label: 'Keep Practicing 💪', color: '#f59e0b' };
-    return { label: 'Need More Practice 📚', color: '#ef4444' };
+    if (pct >= 80) return { label: "Excellent! 🎉", color: "#10b981" };
+    if (pct >= 60) return { label: "Good Job! 👍", color: "#3b82f6" };
+    if (pct >= 40) return { label: "Keep Practicing 💪", color: "#f59e0b" };
+    return { label: "Need More Practice 📚", color: "#ef4444" };
   };
 
   const grade = getGrade(result.percentage);
@@ -410,7 +431,6 @@ function ResultScreen({ result, questions, answers, onExit }) {
     <div className="result-wrapper">
       <Navbar />
       <main className="result-main">
-
         {/* Score card */}
         <div className="score-card">
           <div className="score-grade" style={{ color: grade.color }}>
@@ -446,7 +466,8 @@ function ResultScreen({ result, questions, answers, onExit }) {
         </div>
 
         <p className="negative-note">
-          * GATE negative marking applied: -1/3 for wrong 1-mark, -2/3 for wrong 2-mark questions
+          * GATE negative marking applied: -1/3 for wrong 1-mark, -2/3 for wrong
+          2-mark questions
         </p>
 
         {/* Action buttons */}
@@ -455,7 +476,7 @@ function ResultScreen({ result, questions, answers, onExit }) {
             className="review-btn"
             onClick={() => setShowReview(!showReview)}
           >
-            {showReview ? 'Hide Review' : '📋 Review Answers'}
+            {showReview ? "Hide Review" : "📋 Review Answers"}
           </button>
           <button className="exit-btn" onClick={onExit}>
             🔄 Practice Again
@@ -467,46 +488,51 @@ function ResultScreen({ result, questions, answers, onExit }) {
           <div className="review-section">
             <h3 className="review-title">Answer Review</h3>
             {questions.map((q, i) => {
-              const userAns    = answers[q._id];
-              const isCorrect  = userAns === q.correctAnswer;
-              const isSkipped  = !userAns;
+              const userAns = answers[q._id];
+              const isCorrect = userAns === q.correctAnswer;
+              const isSkipped = !userAns;
 
               return (
                 <div
                   key={q._id}
                   className={`review-item
-                    ${isSkipped ? 'skipped' :
-                      isCorrect ? 'correct' : 'wrong'}
+                    ${isSkipped ? "skipped" : isCorrect ? "correct" : "wrong"}
                   `}
                 >
                   <div className="review-q-top">
                     <span className="review-num">Q{i + 1}</span>
                     <span className="review-topic">{q.topic}</span>
-                    <span className={`review-status
-                      ${isSkipped ? 'skip' :
-                        isCorrect ? 'ok' : 'fail'}
-                    `}>
-                      {isSkipped ? '⏭ Skipped' :
-                       isCorrect ? '✅ Correct' : '❌ Wrong'}
+                    <span
+                      className={`review-status
+                      ${isSkipped ? "skip" : isCorrect ? "ok" : "fail"}
+                    `}
+                    >
+                      {isSkipped
+                        ? "⏭ Skipped"
+                        : isCorrect
+                          ? "✅ Correct"
+                          : "❌ Wrong"}
                     </span>
                   </div>
 
                   <p className="review-q-text">{q.question}</p>
 
                   <div className="review-options">
-                    {['A','B','C','D'].map(opt => (
+                    {["A", "B", "C", "D"].map((opt) => (
                       <div
                         key={opt}
                         className={`review-opt
-                          ${opt === q.correctAnswer ? 'correct-opt' : ''}
-                          ${opt === userAns && !isCorrect ? 'wrong-opt' : ''}
+                          ${opt === q.correctAnswer ? "correct-opt" : ""}
+                          ${opt === userAns && !isCorrect ? "wrong-opt" : ""}
                         `}
                       >
                         <strong>{opt}.</strong> {q[`option${opt}`]}
-                        {opt === q.correctAnswer &&
-                          <span className="correct-tag">✓ Correct</span>}
-                        {opt === userAns && !isCorrect &&
-                          <span className="wrong-tag">✗ Your answer</span>}
+                        {opt === q.correctAnswer && (
+                          <span className="correct-tag">✓ Correct</span>
+                        )}
+                        {opt === userAns && !isCorrect && (
+                          <span className="wrong-tag">✗ Your answer</span>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -515,7 +541,6 @@ function ResultScreen({ result, questions, answers, onExit }) {
             })}
           </div>
         )}
-
       </main>
     </div>
   );
