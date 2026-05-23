@@ -39,10 +39,8 @@ export default function GatePage() {
       if (filters.topic !== "All") params.topic = filters.topic;
       if (filters.examYear !== "All") params.examYear = filters.examYear;
 
-      const res = await api.get("/api/gate", {
-        params,
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get('/api/gate', { params });
+      
       setQuestions(res.data.questions);
     } catch {
       toast.error("Failed to load questions");

@@ -29,9 +29,7 @@ export default function AdminGate() {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
       const res   = await api.get('/api/gate', {
-        headers: { Authorization: `Bearer ${token}` }
       });
       setQuestions(res.data.questions);
     } catch {
@@ -60,9 +58,9 @@ export default function AdminGate() {
     if (!validate()) return;
     setSaving(true);
     try {
-      const token = localStorage.getItem('token');
+
       await api.post('/api/gate', form, {
-        headers: { Authorization: `Bearer ${token}` }
+        
       });
       toast.success('Question added!');
       setForm(emptyForm);
@@ -78,9 +76,9 @@ export default function AdminGate() {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this question?')) return;
     try {
-      const token = localStorage.getItem('token');
+
       await api.delete(`/api/gate/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
+       
       });
       toast.success('Question deleted!');
       fetchQuestions();

@@ -25,9 +25,8 @@ export default function AdminPapers() {
   const fetchPapers = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
       const res   = await api.get('/api/papers', {
-        headers: { Authorization: `Bearer ${token}` }
+        
       });
       setPapers(res.data.papers);
     } catch {
@@ -59,7 +58,7 @@ export default function AdminPapers() {
     try {
       const token = localStorage.getItem('token');
       await api.post('/api/papers', form, {
-        headers: { Authorization: `Bearer ${token}` }
+        
       });
       toast.success('Paper added successfully!');
       setForm(empty);
@@ -77,7 +76,7 @@ export default function AdminPapers() {
     try {
       const token = localStorage.getItem('token');
       await api.delete(`/api/papers/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
+        
       });
       toast.success('Paper deleted!');
       fetchPapers();

@@ -10,9 +10,9 @@ export default function AdminUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('token');
+      
         const res   = await api.get('/api/auth/users', {
-          headers: { Authorization: `Bearer ${token}` }
+         
         });
         setUsers(res.data.users);
       } catch {
