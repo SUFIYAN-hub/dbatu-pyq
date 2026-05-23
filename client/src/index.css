@@ -1,0 +1,39 @@
+:root {
+  --bg-primary: #070b18;
+  --bg-secondary: #0d1428;
+  --bg-card: #111827;
+  --accent: #3b82f6;
+  --accent-dark: #2563eb;
+  --accent-glow: rgba(59, 130, 246, 0.3);
+  --text-primary: #f0f4ff;
+  --text-secondary: #8b9ec7;
+  --border: rgba(59, 130, 246, 0.15);
+  --border-bright: rgba(59, 130, 246, 0.4);
+  --success: #10b981;
+  --danger: #ef4444;
+  --radius: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fadeUp { animation: fadeUp 0.5s ease forwards; }
