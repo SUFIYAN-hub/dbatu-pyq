@@ -26,8 +26,9 @@ export default function GatePage() {
   const YEARS = ["All", "2023", "2022", "2021", "2020", "2019"];
 
   // eslint-disable-next-line
-  useEffect(() => {
+ useEffect(() => {
     fetchQuestions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const fetchQuestions = async () => {
