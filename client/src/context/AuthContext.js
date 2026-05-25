@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../utils/api';
+import axios from 'axios';
+
+const BASE_URL = 'https://dbatu-pyq-server.onrender.com';
 
 const AuthContext = createContext(null);
 
@@ -17,7 +19,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await api.post('/api/auth/login', { email, password });
+    const res = await axios.post(`${BASE_URL}/api/auth/login`, {
+      email, password
+    });
     const { token, user } = res.data;
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
@@ -26,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password, confirmPassword) => {
-    const res = await api.post('/api/auth/register', {
+    const res = await axios.post(`${BASE_URL}/api/auth/register`, {
       name, email, password, confirmPassword
     });
     const { token, user } = res.data;

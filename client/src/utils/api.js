@@ -1,10 +1,11 @@
 import axios from 'axios';
 
+const BASE_URL = 'https://dbatu-pyq-server.onrender.com';
+
 const api = axios.create({
-  baseURL: 'https://dbatu-pyq-server.onrender.com',
+  baseURL: BASE_URL,
 });
 
-// Auto attach token to every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
