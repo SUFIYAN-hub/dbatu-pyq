@@ -56,7 +56,7 @@ export default function AdminPapers() {
     if (!validate()) return;
     setSaving(true);
     try {
-      const token = localStorage.getItem('token');
+      
       await api.post('/api/papers', form, {
         
       });
@@ -74,7 +74,7 @@ export default function AdminPapers() {
   const handleDelete = async (id, title) => {
     if (!window.confirm(`Delete "${title}"?`)) return;
     try {
-      const token = localStorage.getItem('token');
+
       await api.delete(`/api/papers/${id}`, {
         
       });

@@ -34,7 +34,6 @@ export default function GatePage() {
   const fetchQuestions = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
       const params = {};
       if (filters.topic !== "All") params.topic = filters.topic;
       if (filters.examYear !== "All") params.examYear = filters.examYear;
