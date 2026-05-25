@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password, confirmPassword) => {
+      console.log('Sending:', { name, email, password, confirmPassword }); // add this
     const res = await axios.post(`${BASE_URL}/api/auth/register`, {
       name, email, password, confirmPassword
     });
